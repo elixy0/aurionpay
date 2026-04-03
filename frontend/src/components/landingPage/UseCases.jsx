@@ -6,28 +6,24 @@ export function UseCases() {
       icon: ShoppingCart,
       title: 'E-commerce',
       description: 'Accept private payments for online stores while maintaining customer privacy and regulatory compliance.',
-      stats: '2,400+ stores',
       color: 'purple',
     },
     {
       icon: Users,
       title: 'DAO Treasury Payments',
       description: 'Enable private contributor payments and grants while maintaining transparency where needed.',
-      stats: '180+ DAOs',
       color: 'blue',
     },
     {
       icon: RefreshCw,
       title: 'Subscription Services',
       description: 'Recurring private payments for SaaS, memberships, and subscription-based business models.',
-      stats: '850+ apps',
       color: 'green',
     },
     {
       icon: Briefcase,
-      title: 'On-chain Payroll',
+      title: 'Onchain Payroll',
       description: 'Pay remote teams in crypto privately, with automatic currency conversion and compliance tools.',
-      stats: '340+ companies',
       color: 'orange',
     },
   ];
@@ -72,10 +68,9 @@ export function UseCases() {
         <div className="text-center mb-20">
           <h2 className="text-5xl font-bold mb-6">Built for Every Use Case</h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            From startups to enterprises, PrivacyPay powers private payments across industries
+            From startups to enterprises, AurionPay powers private payments across industries
           </p>
         </div>
-
         <div className="grid grid-cols-2 gap-8">
           {useCases.map((useCase, index) => {
             const colorClasses = getColorClasses(useCase.color);
@@ -84,28 +79,18 @@ export function UseCases() {
                 key={index}
                 className="group relative p-10 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300 overflow-hidden"
               >
-                {/* Background gradient on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br from-transparent to-transparent ${colorClasses.bg} transition-all duration-300`} />
-
                 <div className="relative z-10">
-                  {/* Icon */}
                   <div className={`inline-flex p-5 rounded-2xl bg-gradient-to-br ${colorClasses.icon} mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     <useCase.icon className={`w-10 h-10 ${colorClasses.iconColor}`} />
                   </div>
-
-                  {/* Content */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-2xl font-bold">{useCase.title}</h3>
-                      <span className={`text-sm px-3 py-1 rounded-full border ${colorClasses.badge}`}>
-                        {useCase.stats}
-                      </span>
                     </div>
-
                     <p className="text-gray-400 leading-relaxed text-lg">
                       {useCase.description}
                     </p>
-
                     <a
                       href="#"
                       className={`inline-flex items-center gap-2 font-medium transition-colors pt-2 ${colorClasses.link}`}
@@ -121,8 +106,6 @@ export function UseCases() {
             );
           })}
         </div>
-
-        {/* CTA banner */}
         <div className="mt-16 p-12 rounded-2xl bg-gradient-to-r from-purple-900/20 via-blue-900/20 to-purple-900/20 border border-white/10 text-center">
           <h3 className="text-3xl font-bold mb-4">Have a custom use case?</h3>
           <p className="text-gray-400 mb-8 max-w-2xl mx-auto">

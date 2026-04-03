@@ -2,7 +2,6 @@ import { Header } from './components/landingPage/Header';
 import { Hero } from './components/landingPage/Hero';
 import { TrustBar } from './components/landingPage/TrustBar';
 import { HowItWorks } from './components/landingPage/HowItWorks';
-import { Architecture } from './components/landingPage/Architecture';
 import { FeatureGrid } from './components/landingPage/FeatureGrid';
 import { CodeSection } from './components/landingPage/CodeSection';
 import { UseCases } from './components/landingPage/UseCases';
@@ -18,7 +17,6 @@ export default function LandingPage() {
       <Hero />
       <TrustBar />
       <HowItWorks />
-      <Architecture />
       <FeatureGrid />
       <CodeSection />
       <UseCases />

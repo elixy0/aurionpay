@@ -62,7 +62,6 @@ export function Footer() {
           }}
           className="footer-grid"
         >
-          {/* Link columns */}
           {footerSections.map((section) => (
             <div key={section.title}>
               <h4
@@ -103,8 +102,6 @@ export function Footer() {
               </ul>
             </div>
           ))}
-
-          {/* Newsletter + Social */}
           <div>
             <h4
               style={{
@@ -118,8 +115,6 @@ export function Footer() {
             >
               Stay Updated
             </h4>
-
-            {/* Email input */}
             <div
               style={{
                 display: "flex",
@@ -171,8 +166,6 @@ export function Footer() {
                 Subscribe
               </button>
             </div>
-
-            {/* Social icons */}
             <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
@@ -208,8 +201,6 @@ export function Footer() {
                 </a>
               ))}
             </div>
-
-            {/* Network status */}
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
                 <span
@@ -241,13 +232,11 @@ export function Footer() {
                 </span>
               </div>
               <p style={{ fontSize: "11px", color: "#334155", margin: 0 }}>
-                Powered by Polkadot Hub
+                Powered by Hashkey
               </p>
             </div>
           </div>
         </div>
-
-        {/* Bottom bar */}
         <div
           style={{
             paddingTop: "20px",
@@ -258,11 +247,10 @@ export function Footer() {
           }}
         >
           <p style={{ fontSize: "12px", color: "#334155", margin: 0 }}>
-            © 2026 PrivacyPay. All rights reserved.
+            © 2026 AurionPay. All rights reserved.
           </p>
         </div>
       </div>
-
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }

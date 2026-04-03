@@ -1,6 +1,3 @@
-// src/hooks/useContracts.js
-// Returns ethers contract instances connected to the signer
-
 import { useMemo } from "react";
 import { ethers } from "ethers";
 import {

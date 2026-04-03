@@ -2,10 +2,10 @@ import { Shield, Hash, Boxes, Network } from 'lucide-react';
 
 export function TrustBar() {
   const badges = [
-    { icon: Network, label: 'Built on Polkadot Hub' },
+    { icon: Network, label: 'Built on Hashkey-testnet' },
     { icon: Shield, label: 'Groth16 Verified' },
     { icon: Hash, label: 'Poseidon Hash' },
-    { icon: Boxes, label: 'EVM + PVM Hybrid' },
+    { icon: Boxes, label: 'EVM Compatibility' },
   ];
 
   return (
@@ -16,7 +16,6 @@ export function TrustBar() {
             Trusted Infrastructure
           </p>
         </div>
-        
         <div className="grid grid-cols-4 gap-8">
           {badges.map((badge, index) => (
             <div

@@ -3,15 +3,14 @@ import { useState } from 'react';
 
 export function CodeSection() {
   const [copied, setCopied] = useState(false);
-
   const codeExample = `// Install the SDK
 npm install @aurionpay/sdk
 
-// Initialize PrivacyPay
-import { PrivacyPay } from '@aurionpay/sdk';
+// Initialize AurionPay
+import { AurionPay } from '@aurionpay/sdk';
 
 const aurionPay = new AurionPay({
-  network: 'polkadot-hub',
+  network: 'hashkey-testnet',
   apiKey: process.env.AURIONPAY_API_KEY
 });
 
@@ -46,13 +45,11 @@ await aurionPay.withdraw({
     <section className="relative py-32 bg-gradient-to-b from-[#0a0a0f] to-[#0f1729]">
       <div className="max-w-[1440px] mx-auto px-16">
         <div className="grid grid-cols-2 gap-20 items-center">
-          {/* Left: Text */}
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-sm text-green-300">
               <Terminal className="w-4 h-4" />
               Developer Experience
             </div>
-
             <h2 className="text-5xl font-bold leading-tight">
               Deploy in
               <br />
@@ -60,11 +57,9 @@ await aurionPay.withdraw({
                 Minutes
               </span>
             </h2>
-
             <p className="text-xl text-gray-400 leading-relaxed">
               Simple, intuitive SDK that abstracts away the complexity of zero-knowledge cryptography. Focus on building your product, not crypto infrastructure.
             </p>
-
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-green-400 rounded-full" />
@@ -79,7 +74,6 @@ await aurionPay.withdraw({
                 <span className="text-gray-300">React hooks and UI components included</span>
               </div>
             </div>
-
             <div className="pt-4">
               <a
                 href="#"
@@ -92,13 +86,9 @@ await aurionPay.withdraw({
               </a>
             </div>
           </div>
-
-          {/* Right: Code block */}
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-blue-600/20 blur-3xl rounded-full" />
-            
             <div className="relative rounded-2xl bg-[#0d1117] border border-white/10 overflow-hidden shadow-2xl">
-              {/* Terminal header */}
               <div className="flex items-center justify-between px-6 py-4 bg-[#161b22] border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -117,24 +107,19 @@ await aurionPay.withdraw({
                   )}
                 </button>
               </div>
-
-              {/* Code content */}
               <div className="p-6 overflow-x-auto">
                 <pre className="text-sm leading-relaxed">
                   <code className="text-gray-300">
                     <span className="text-gray-500">// Install the SDK</span>{'\n'}
                     <span className="text-pink-400">npm install</span> <span className="text-blue-400">@aurionpay/sdk</span>{'\n\n'}
-                    
                     <span className="text-gray-500">// Initialize AurionPay</span>{'\n'}
                     <span className="text-purple-400">import</span> {'{ '}
                     <span className="text-blue-300">AurionPay</span>
                     {' }'} <span className="text-purple-400">from</span> <span className="text-green-400">'@aurionpay/sdk'</span>;{'\n\n'}
-                    
                     <span className="text-purple-400">const</span> <span className="text-blue-300">aurionPay</span> = <span className="text-purple-400">new</span> <span className="text-yellow-400">AurionPay</span>({'{'}
-                    {'\n  '}network: <span className="text-green-400">'polkadot-hub'</span>,
+                    {'\n  '}network: <span className="text-green-400">'hashkey-testnet'</span>,
                     {'\n  '}apiKey: <span className="text-blue-300">process</span>.env.<span className="text-blue-300">AURIONPAY_API_KEY</span>
                     {'\n}'});{'\n\n'}
-                    
                     <span className="text-gray-500">// Create a payment intent</span>{'\n'}
                     <span className="text-purple-400">const</span> <span className="text-blue-300">intent</span> = <span className="text-purple-400">await</span> aurionPay.<span className="text-yellow-400">createIntent</span>({'{'}
                     {'\n  '}amount: <span className="text-green-400">'100.00'</span>,

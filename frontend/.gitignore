@@ -35,8 +35,6 @@ lerna-debug.log*
 
 
 # ZK Circuit artifacts (large files — host separately)
-*.zkey
-*.wasm
 *.r1cs
 *.sym
 pot*.ptau

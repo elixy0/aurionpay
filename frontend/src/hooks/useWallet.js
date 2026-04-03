@@ -1,6 +1,3 @@
-// src/hooks/useWallet.js
-// EVM wallet hook using window.ethereum (MetaMask / any EVM wallet)
-
 import { useState, useEffect, useCallback } from "react";
 import { ethers } from "ethers";
 import { CHAIN_ID, RPC_URL } from "../lib/contracts.js";
@@ -22,7 +19,6 @@ export function useWallet() {
 
   const isCorrectChain = chainId === CHAIN_ID;
 
-  // Restore session on mount
   useEffect(() => {
     if (!window.ethereum) return;
     window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {

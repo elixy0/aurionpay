@@ -18,7 +18,6 @@ export function Header() {
 
   const navLinks = [
     { label: "Features", href: "#features" },
-    { label: "Architecture", href: "#architecture" },
     { label: "Developers", href: "#developers" },
     { label: "Security", href: "#security" },
     { label: "Pricing", href: "#pricing" },
@@ -40,7 +39,6 @@ export function Header() {
             </div>
             <span className="text-xl font-bold">AurionPay</span>
           </a>
-
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
@@ -52,7 +50,6 @@ export function Header() {
               </a>
             ))}
           </div>
-
           <div className="hidden md:flex items-center gap-4">
             <a
               href="#"
@@ -67,7 +64,6 @@ export function Header() {
               Get Started
             </Link>
           </div>
-
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
@@ -79,7 +75,6 @@ export function Header() {
             )}
           </button>
         </div>
-
         {isMobileMenuOpen && (
           <div className="md:hidden mt-6 p-6 rounded-2xl bg-[#0f1729] border border-white/10">
             <div className="flex flex-col gap-4">

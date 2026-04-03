@@ -1,10 +1,6 @@
-// src/utils/zkUtils.js
-// ZK proof utilities  Poseidon hashing + Groth16 proof generation
-
 import { buildPoseidon } from "circomlibjs";
 import * as snarkjs from "snarkjs";
 
-// Generate a curve-safe random 31-byte BigInt
 export function generateCurveSafeRandom() {
   const bytes = new Uint8Array(31);
   window.crypto.getRandomValues(bytes);
@@ -13,12 +9,10 @@ export function generateCurveSafeRandom() {
   );
 }
 
-// Convert BigInt to 32-byte hex string (no 0x prefix)
 export function bigIntToHex32(n) {
   return n.toString(16).padStart(64, "0");
 }
 
-// Generate Poseidon commitment = Poseidon(secret, nullifier)
 export async function generateCommitment(secret, nullifier) {
   const poseidon   = await buildPoseidon();
   const hash       = poseidon([secret, nullifier]);
@@ -26,19 +20,16 @@ export async function generateCommitment(secret, nullifier) {
   return commitHex;
 }
 
-// Generate nullifier hash = Poseidon(nullifier)
 export async function generateNullifierHash(nullifier) {
   const poseidon = await buildPoseidon();
   const hash     = poseidon([nullifier]);
   return poseidon.F.toString(hash);
 }
 
-// Generate backup note from secret + nullifier
 export function generateBackupNote(secret, nullifier) {
   return `aurion-${secret.toString(16)}-${nullifier.toString(16)}`;
 }
 
-// Parse backup note back to secret + nullifier
 export function parseBackupNote(note) {
   if (!note.startsWith("aurion-")) throw new Error("Invalid note format");
   const parts = note.split("-");
@@ -49,7 +40,6 @@ export function parseBackupNote(note) {
   };
 }
 
-// Generate full ZK proof for withdrawal
 export async function generateWithdrawProof({ secret, nullifier, invoiceId }) {
   const poseidon = await buildPoseidon();
 
@@ -75,7 +65,6 @@ export async function generateWithdrawProof({ secret, nullifier, invoiceId }) {
   return { proof, publicSignals, nullifierHex };
 }
 
-// Parse Groth16 proof into the format Solidity verifier expects
 export function parseProofForSolidity(proof) {
   const a  = [BigInt(proof.pi_a[0]),  BigInt(proof.pi_a[1])];
   const b  = [

@@ -1,6 +1,3 @@
-// src/lib/contracts.js
-// HashKey Chain Testnet  Chain ID 133
-
 export const CHAIN_ID    = 133;
 export const NETWORK     = "hashkey-testnet";
 export const RPC_URL     = "https://testnet.hsk.xyz";
@@ -10,17 +7,11 @@ export const RELAYER_URL = import.meta.env.VITE_RELAYER_URL || "http://localhost
 export const ADDRESSES = {
   privacyPool:    import.meta.env.VITE_PRIVACY_POOL_ADDRESS    || "",
   paymentGateway: import.meta.env.VITE_PAYMENT_GATEWAY_ADDRESS || "",
-  // Official HashKey testnet stablecoin faucet addresses (from HSP docs)
   usdt:   import.meta.env.VITE_USDT_ADDRESS || "0x372325443233fEbaC1F6998aC750276468c83CC6",
-  usdc:   import.meta.env.VITE_USDC_ADDRESS || "0x79AEc4EeA31D50792F61D1Ca0733C18c89524C9e",
-  // Wrapped HSK  deploy WrapperHSK.sol or use a community-deployed one
-  // HSK native token cannot be deposited into an ERC20 pool directly
+  usdc:   import.meta.env.VITE_USDC_ADDRESS || "0x8FE3cB719Ee4410E236Cd6b72ab1fCDC06eF53c6",
   whsk:   import.meta.env.VITE_WHSK_ADDRESS || "",
 };
 
-// HSK is the native gas token of HashKey Chain (like ETH on Ethereum)
-// To deposit HSK into the ERC20 pool, users must first wrap it to WHSK
-// USDT and USDC use the official HSP faucet addresses
 export const SUPPORTED_TOKENS = {
   USDT: {
     address:  ADDRESSES.usdt,
@@ -49,7 +40,6 @@ export const SUPPORTED_TOKENS = {
   },
 };
 
-// Filter out tokens with no address configured
 export function getAvailableTokens() {
   return Object.entries(SUPPORTED_TOKENS)
     .filter(([, t]) => t.address && t.address !== "")
@@ -86,7 +76,6 @@ export const ERC20_ABI = [
   "function symbol() external view returns (string)",
 ];
 
-// WHSK wrapper ABI  for wrapping native HSK into ERC20
 export const WHSK_ABI = [
   ...ERC20_ABI,
   "function deposit() external payable",

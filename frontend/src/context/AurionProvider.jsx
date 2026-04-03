@@ -3,8 +3,6 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 const AurionContext = createContext({});
 
 export function AurionProvider({ children }) {
-
-  // ── Mode ───────────────────────────────────────────────────────────────────
   const [mode, setMode] = useState(
     () => localStorage.getItem("aurion-mode") || "merchant"
   );
@@ -14,7 +12,6 @@ export function AurionProvider({ children }) {
     setMode(newMode);
   }
 
-  // ── Notes ──────────────────────────────────────────────────────────────────
   const [notes, setNotes] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("aurion-notes") || "[]");
@@ -23,7 +20,6 @@ export function AurionProvider({ children }) {
     }
   });
 
-  // ✅ Kept your original API exactly — no renames
   function saveNote(noteString) {
     const updated = [...notes, noteString];
     setNotes(updated);
@@ -36,7 +32,6 @@ export function AurionProvider({ children }) {
     localStorage.setItem("aurion-notes", JSON.stringify(updated));
   }
 
-  // ── Intents ────────────────────────────────────────────────────────────────
   const [intents, setIntents] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("aurion-intents") || "[]");
@@ -53,7 +48,7 @@ export function AurionProvider({ children }) {
     setIntents((prev) => {
       const exists = prev.some((it) => String(it.id) === String(intent.id));
       if (exists) return prev;
-      return [intent, ...prev]; // newest first
+      return [intent, ...prev]; 
     });
   }, []);
 
@@ -71,7 +66,6 @@ export function AurionProvider({ children }) {
     [intents]
   );
 
-  // Auto-expire OPEN intents when their expiresAt passes
   const clearExpiredIntents = useCallback(() => {
     const now = Math.floor(Date.now() / 1000);
     setIntents((prev) =>
@@ -89,15 +83,12 @@ export function AurionProvider({ children }) {
     return () => clearInterval(id);
   }, [clearExpiredIntents]);
 
-  // ── Context value ──────────────────────────────────────────────────────────
   const value = {
-    // original — untouched
     mode,
     switchMode,
     notes,
     saveNote,
     removeNote,
-    // new
     intents,
     addIntent,
     updateIntentStatus,

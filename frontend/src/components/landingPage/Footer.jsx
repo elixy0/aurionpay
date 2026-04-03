@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Github, Twitter, MessageCircle, Mail, ExternalLink } from 'lucide-react';
+import Logoimg from "../../assets/logo.png"
 
 export function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
-
   const handleSubscribe = (e) => {
     e.preventDefault();
     setSubscribed(true);
@@ -15,18 +15,8 @@ export function Footer() {
   };
 
   const footerLinks = {
-    product: {
-      title: 'Product',
-      links: [
-        { label: 'Features', href: '#' },
-        { label: 'Pricing', href: '#' },
-        { label: 'Security', href: '#' },
-        { label: 'Roadmap', href: '#' },
-        { label: 'Changelog', href: '#' },
-      ],
-    },
-    developers: {
-      title: 'Developers',
+    resources: {
+      title: 'Resources',
       links: [
         { label: 'Documentation', href: '#', external: true },
         { label: 'API Reference', href: '#', external: true },
@@ -35,48 +25,24 @@ export function Footer() {
         { label: 'Status Page', href: '#', external: true },
       ],
     },
-    company: {
-      title: 'Company',
-      links: [
-        { label: 'About', href: '#' },
-        { label: 'Blog', href: '#' },
-        { label: 'Careers', href: '#' },
-        { label: 'Contact', href: '#' },
-        { label: 'Press Kit', href: '#' },
-      ],
-    },
-    resources: {
-      title: 'Resources',
-      links: [
-        { label: 'Community', href: '#' },
-        { label: 'Discord', href: 'https://discord.gg/aurionpay', external: true },
-        { label: 'Learn', href: '#' },
-        { label: 'Support', href: '#' },
-        { label: 'Terms', href: '#' },
-      ],
-    },
   };
 
   return (
     <footer className="relative border-t border-white/5 bg-gradient-to-b from-[#0a0a0f] to-[#060609]">
       <div className="max-w-[1440px] mx-auto px-16 py-20">
-        {/* Top section */}
-        <div className="grid grid-cols-6 gap-16 pb-16 border-b border-white/5">
-          {/* Brand & Newsletter */}
+        <div className="grid grid-cols-4 gap-26 pb-16 border-b border-white/5">
           <div className="col-span-2 space-y-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
-                  <div className="w-6 h-6 bg-white rounded-sm" />
+                <div>
+                 <img src={Logoimg} alt="AurionPay Logo"  className="w-8 h-8 rounded-sm"/>
                 </div>
                 <span className="text-2xl font-bold">AurionPay</span>
               </div>
               <p className="text-gray-400 leading-relaxed">
-                Private payment infrastructure built on Polkadot Hub. Accept DOT and stablecoins with zero-knowledge privacy.
+                Private payment infrastructure built on Hashkey testnet. Accept WHSK and stablecoins with zero-knowledge privacy.
               </p>
             </div>
-
-            {/* Newsletter */}
             <div>
               <h4 className="font-semibold mb-4">Stay Updated</h4>
               <form onSubmit={handleSubscribe} className="space-y-3">
@@ -101,8 +67,6 @@ export function Footer() {
               </form>
             </div>
           </div>
-
-          {/* Links columns */}
           {Object.entries(footerLinks).map(([key, section]) => (
             <div key={key}>
               <h4 className="font-semibold mb-6">{section.title}</h4>
@@ -123,14 +87,9 @@ export function Footer() {
               </ul>
             </div>
           ))}
-        </div>
-
-        {/* Bottom section */}
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          {/* Social links */}
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com/telixgoldens/aurionpay"
+              href="https://github.com/telixgoldens/aurionpay-hash"
               className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-purple-500/30 transition-all duration-300"
               aria-label="GitHub"
             >
@@ -151,8 +110,8 @@ export function Footer() {
               <MessageCircle className="w-5 h-5" />
             </a>
           </div>
-
-          {/* Copyright & Legal */}
+        </div>
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500">
             <span>© 2026 AurionPay. All rights reserved.</span>
             <a href="#" className="hover:text-white transition-colors">
@@ -165,18 +124,6 @@ export function Footer() {
               Cookie Policy
             </a>
           </div>
-        </div>
-
-        {/* Status indicator */}
-        <div className="mt-8 pt-8 border-t border-white/5 flex items-center justify-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-sm text-gray-400">All systems operational</span>
-          </div>
-          <span className="text-gray-600">•</span>
-          <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
-            View Status →
-          </a>
         </div>
       </div>
     </footer>

@@ -3,5 +3,4 @@
 /* eslint-disable */
 export * as privacyPoolSol from './PrivacyPool.sol/index.js';
 export * as verifierSol from './Verifier.sol/index.js';
-export { MockUSDT__factory } from './MockUSDT__factory.js';
 export { PaymentGateway__factory } from './PaymentGateway__factory.js';

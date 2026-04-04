@@ -21,9 +21,9 @@
           "type": "uint256[2]"
         },
         {
-          "internalType": "uint256[5]",
+          "internalType": "uint256[3]",
           "name": "input",
-          "type": "uint256[5]"
+          "type": "uint256[3]"
         }
       ],
       "name": "verifyProof",
@@ -44,5 +44,5 @@
   "deployedLinkReferences": {},
   "immutableReferences": {},
   "inputSourceName": "project/contracts/PrivacyPool.sol",
-  "buildInfoId": "solc-0_8_20-39e874cb321cef5b046acbd25dc2145cb1844fe4"
+  "buildInfoId": "solc-0_8_20-04f4ee0a2794f91dd25486818d202a79eb80e89d"
 }

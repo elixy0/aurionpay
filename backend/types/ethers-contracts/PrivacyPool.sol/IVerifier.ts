@@ -10,7 +10,7 @@ import type { TypedContractEvent, TypedDeferredTopicFilter, TypedEventLog, Typed
 
     
 
-    encodeFunctionData(functionFragment: 'verifyProof', values: [[BigNumberish, BigNumberish], [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], [BigNumberish, BigNumberish], [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish]]): string;
+    encodeFunctionData(functionFragment: 'verifyProof', values: [[BigNumberish, BigNumberish], [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], [BigNumberish, BigNumberish], [BigNumberish, BigNumberish, BigNumberish]]): string;
 
     decodeFunctionResult(functionFragment: 'verifyProof', data: BytesLike): Result;
   }
@@ -52,7 +52,7 @@ import type { TypedContractEvent, TypedDeferredTopicFilter, TypedEventLog, Typed
     
     
     verifyProof: TypedContractMethod<
-      [a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], input: [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish], ],
+      [a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], input: [BigNumberish, BigNumberish, BigNumberish], ],
       [boolean],
       'view'
     >
@@ -62,7 +62,7 @@ import type { TypedContractEvent, TypedDeferredTopicFilter, TypedEventLog, Typed
     getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
     getFunction(nameOrSignature: 'verifyProof'): TypedContractMethod<
-      [a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], input: [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish], ],
+      [a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], input: [BigNumberish, BigNumberish, BigNumberish], ],
       [boolean],
       'view'
     >;

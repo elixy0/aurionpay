@@ -25,7 +25,7 @@ encodeFunctionData(functionFragment: 'supportedTokens', values: [AddressLike]): 
 encodeFunctionData(functionFragment: 'transferOwnership', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'updateRelayer', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'verifier', values?: undefined): string;
-encodeFunctionData(functionFragment: 'withdrawAndPay', values: [BytesLike, BytesLike, [BigNumberish, BigNumberish], [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], [BigNumberish, BigNumberish], [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish]]): string;
+encodeFunctionData(functionFragment: 'withdrawAndPay', values: [BytesLike, BytesLike, [BigNumberish, BigNumberish], [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], [BigNumberish, BigNumberish], [BigNumberish, BigNumberish, BigNumberish]]): string;
 
     decodeFunctionResult(functionFragment: 'addToken', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'deposit', data: BytesLike): Result;
@@ -285,7 +285,7 @@ decodeFunctionResult(functionFragment: 'withdrawAndPay', data: BytesLike): Resul
 
     
     withdrawAndPay: TypedContractMethod<
-      [nullifier: BytesLike, invoiceId: BytesLike, a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], publicSignals: [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish], ],
+      [nullifier: BytesLike, invoiceId: BytesLike, a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], publicSignals: [BigNumberish, BigNumberish, BigNumberish], ],
       [void],
       'nonpayable'
     >
@@ -370,7 +370,7 @@ getFunction(nameOrSignature: 'verifier'): TypedContractMethod<
       'view'
     >;
 getFunction(nameOrSignature: 'withdrawAndPay'): TypedContractMethod<
-      [nullifier: BytesLike, invoiceId: BytesLike, a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], publicSignals: [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish], ],
+      [nullifier: BytesLike, invoiceId: BytesLike, a: [BigNumberish, BigNumberish], b: [[BigNumberish, BigNumberish], [BigNumberish, BigNumberish]], c: [BigNumberish, BigNumberish], publicSignals: [BigNumberish, BigNumberish, BigNumberish], ],
       [void],
       'nonpayable'
     >;

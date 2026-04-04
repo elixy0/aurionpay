@@ -10,29 +10,25 @@ import * as Contracts from "./index.js";
 
 declare module "@nomicfoundation/hardhat-ethers/types" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
-  getContractFactory(name: 'MockUSDT', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.MockUSDT__factory>
-getContractFactory(name: 'PaymentGateway', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.PaymentGateway__factory>
+  getContractFactory(name: 'PaymentGateway', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.PaymentGateway__factory>
 getContractFactory(name: 'IPaymentGateway', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IPaymentGateway__factory>
 getContractFactory(name: 'IVerifier', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IVerifier__factory>
 getContractFactory(name: 'PrivacyPool', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.PrivacyPool__factory>
 getContractFactory(name: 'Groth16Verifier', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Groth16Verifier__factory>
 
-  getContractAt(name: 'MockUSDT', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.MockUSDT>
-getContractAt(name: 'PaymentGateway', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.PaymentGateway>
+  getContractAt(name: 'PaymentGateway', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.PaymentGateway>
 getContractAt(name: 'IPaymentGateway', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IPaymentGateway>
 getContractAt(name: 'IVerifier', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IVerifier>
 getContractAt(name: 'PrivacyPool', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.PrivacyPool>
 getContractAt(name: 'Groth16Verifier', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.Groth16Verifier>
 
-  deployContract(name: 'MockUSDT', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockUSDT>
-deployContract(name: 'PaymentGateway', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.PaymentGateway>
+  deployContract(name: 'PaymentGateway', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.PaymentGateway>
 deployContract(name: 'IPaymentGateway', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IPaymentGateway>
 deployContract(name: 'IVerifier', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IVerifier>
 deployContract(name: 'PrivacyPool', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.PrivacyPool>
 deployContract(name: 'Groth16Verifier', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.Groth16Verifier>
 
-  deployContract(name: 'MockUSDT', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockUSDT>
-deployContract(name: 'PaymentGateway', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.PaymentGateway>
+  deployContract(name: 'PaymentGateway', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.PaymentGateway>
 deployContract(name: 'IPaymentGateway', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IPaymentGateway>
 deployContract(name: 'IVerifier', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IVerifier>
 deployContract(name: 'PrivacyPool', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.PrivacyPool>

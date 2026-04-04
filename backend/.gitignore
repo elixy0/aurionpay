@@ -46,6 +46,7 @@ npm-debug.log*
 relayer/logs/
 
 # Keys and secrets
+hsp/merchant_private_key.pem
 *.pem
 *.key
 

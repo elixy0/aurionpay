@@ -1,54 +1,100 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import {
-  Shield, LayoutDashboard, Wallet,
-  ChevronLeft, Menu, X, Copy, CheckCircle2,
-  Store, Users,
+  Shield,
+  LayoutDashboard,
+  Wallet,
+  ChevronLeft,
+  Menu,
+  X,
+  Copy,
+  CheckCircle2,
+  Store,
+  Users,
+  Brain,
 } from "lucide-react";
 import { useWallet } from "../../hooks/useWallet.js";
 import { formatAddress } from "../../utils/tokenUtils.js";
 import Merchant from "./Merchant.jsx";
 import Customer from "./Customer.jsx";
 import Overview from "./Overview.jsx";
+import AIPanel from "./Aipanel.jsx";
 
-// Re-export for backward compat with child components
-export { ADDRESSES, SUPPORTED_TOKENS, EXPLORER, RELAYER_URL, PAYMENT_GATEWAY_ABI, ERC20_ABI } from "../../lib/contracts.js";
+export {
+  ADDRESSES,
+  SUPPORTED_TOKENS,
+  EXPLORER,
+  RELAYER_URL,
+  PAYMENT_GATEWAY_ABI,
+  ERC20_ABI,
+} from "../../lib/contracts.js";
 
 const NAV = [
   { id: "dashboard", label: "Overview", icon: LayoutDashboard, path: "/app" },
-  { id: "merchant",  label: "Merchant", icon: Store,           path: "/app/merchant" },
-  { id: "customer",  label: "Customer", icon: Users,           path: "/app/customer" },
+  { id: "merchant", label: "Merchant", icon: Store, path: "/app/merchant" },
+  { id: "customer", label: "Customer", icon: Users, path: "/app/customer" },
+  { id: "ai", label: "AI Tools", icon: Brain, path: "/app/ai" },
 ];
 
 export function CopyBtn({ text }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
-      onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      style={{ background: "none", border: "none", cursor: "pointer", color: copied ? "#10b981" : "#475569", padding: "2px", flexShrink: 0, display: "flex" }}>
+      onClick={() => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      }}
+      style={{
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        color: copied ? "#10b981" : "#475569",
+        padding: "2px",
+        flexShrink: 0,
+        display: "flex",
+      }}
+    >
       {copied ? <CheckCircle2 size={13} /> : <Copy size={13} />}
     </button>
   );
 }
 
 export default function Dashboard() {
-  const { address, signer, provider, isCorrectChain, connect, disconnect, switchToHashKey } = useWallet();
+  const {
+    address,
+    signer,
+    provider,
+    isCorrectChain,
+    connect,
+    disconnect,
+    switchToHashKey,
+  } = useWallet();
 
-  const [collapsed,  setCollapsed]  = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [txLog, setTxLog] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("aurionpay_txlog") || "[]"); } catch { return []; }
+    try {
+      return JSON.parse(localStorage.getItem("aurionpay_txlog") || "[]");
+    } catch {
+      return [];
+    }
   });
 
-  const navigate  = useNavigate();
-  const location  = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    try { localStorage.setItem("aurionpay_txlog", JSON.stringify(txLog)); } catch {}
+    try {
+      localStorage.setItem("aurionpay_txlog", JSON.stringify(txLog));
+    } catch {}
   }, [txLog]);
 
   const addLog = useCallback((label, txid, type = "success") => {
-    setTxLog(prev => [{ label, txid, type, ts: Date.now() }, ...prev.slice(0, 19)]);
+    setTxLog((prev) => [
+      { label, txid, type, ts: Date.now() },
+      ...prev.slice(0, 19),
+    ]);
   }, []);
 
   const isActive = (path) => {
@@ -57,9 +103,15 @@ export default function Dashboard() {
   };
 
   const pageTitle =
-    location.pathname === "/app"           ? "Overview" :
-    location.pathname.includes("merchant") ? "Merchant" :
-    location.pathname.includes("customer") ? "Customer" : "AurionPay";
+    location.pathname === "/app"
+      ? "Overview"
+      : location.pathname.includes("merchant")
+        ? "Merchant"
+        : location.pathname.includes("customer")
+          ? "Customer"
+          : location.pathname.includes("ai")
+            ? "AI Tools"
+            : "AurionPay";
 
   return (
     <>
@@ -164,11 +216,21 @@ export default function Dashboard() {
 
       <div className="dash-layout">
         {mobileOpen && (
-          <div onClick={() => setMobileOpen(false)}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)", zIndex: 40 }} />
+          <div
+            onClick={() => setMobileOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.75)",
+              backdropFilter: "blur(4px)",
+              zIndex: 40,
+            }}
+          />
         )}
 
-        <aside className={`sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}>
+        <aside
+          className={`sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}
+        >
           <div className="sidebar-logo">
             <div className="logo-mark">
               {/* Logo image  place logo.png in src/assets/ and import at top if available */}
@@ -176,60 +238,113 @@ export default function Dashboard() {
             </div>
             {!collapsed && <span className="logo-text">AurionPay</span>}
             {mobileOpen && (
-              <button onClick={() => setMobileOpen(false)}
-                style={{ marginLeft: "auto", background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer" }}>
+              <button
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  marginLeft: "auto",
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-dim)",
+                  cursor: "pointer",
+                }}
+              >
                 <X size={15} />
               </button>
             )}
           </div>
-
           <nav className="sidebar-nav">
             {NAV.map(({ id, label, icon: Icon, path }) => (
-              <button key={id}
+              <button
+                key={id}
                 className={`nav-item ${isActive(path) ? "active" : ""}`}
                 title={collapsed ? label : undefined}
-                onClick={() => { navigate(path); setMobileOpen(false); }}>
+                onClick={() => {
+                  navigate(path);
+                  setMobileOpen(false);
+                }}
+              >
                 <Icon size={17} style={{ flexShrink: 0 }} />
                 {!collapsed && <span className="nav-label">{label}</span>}
               </button>
             ))}
           </nav>
-
           <div className="sidebar-footer">
             {address && !collapsed && (
               <div className="wallet-chip">
-                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "5px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    marginBottom: "5px",
+                  }}
+                >
                   <div className="pulse-dot" />
-                  <span style={{ fontSize: "10px", color: "var(--green)", fontWeight: 700, letterSpacing: "0.07em" }}>CONNECTED</span>
+                  <span
+                    style={{
+                      fontSize: "10px",
+                      color: "var(--green)",
+                      fontWeight: 700,
+                      letterSpacing: "0.07em",
+                    }}
+                  >
+                    CONNECTED
+                  </span>
                 </div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--text-dim)", wordBreak: "break-all", lineHeight: 1.5 }}>
+                <div
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: "10px",
+                    color: "var(--text-dim)",
+                    wordBreak: "break-all",
+                    lineHeight: 1.5,
+                  }}
+                >
                   {address.slice(0, 10)}...{address.slice(-6)}
                 </div>
               </div>
             )}
-            <button className="collapse-btn" onClick={() => setCollapsed(!collapsed)}>
-              <ChevronLeft size={15} style={{ transition: "transform 280ms", transform: collapsed ? "rotate(180deg)" : "rotate(0deg)" }} />
+            <button
+              className="collapse-btn"
+              onClick={() => setCollapsed(!collapsed)}
+            >
+              <ChevronLeft
+                size={15}
+                style={{
+                  transition: "transform 280ms",
+                  transform: collapsed ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+              />
             </button>
           </div>
         </aside>
-
-        <div className="dash-main" style={{ marginLeft: collapsed ? "60px" : "220px" }}>
-
+        <div
+          className="dash-main"
+          style={{ marginLeft: collapsed ? "60px" : "220px" }}
+        >
           {/* Wrong chain banner */}
           {address && !isCorrectChain && (
             <div className="wrong-chain-banner">
-              <span>Wrong network  please switch to HashKey Chain Testnet (Chain ID 133)</span>
-              <button className="btn-secondary" style={{ fontSize: "11px", padding: "4px 12px" }}
-                onClick={switchToHashKey}>
+              <span>
+                Wrong network please switch to HashKey Chain Testnet (Chain ID
+                133)
+              </span>
+              <button
+                className="btn-secondary"
+                style={{ fontSize: "11px", padding: "4px 12px" }}
+                onClick={switchToHashKey}
+              >
                 Switch Network
               </button>
             </div>
           )}
-
           <header className="topbar">
             <div className="topbar-left">
-              <button className="mobile-menu-btn btn-secondary" style={{ padding: "7px" }}
-                onClick={() => setMobileOpen(true)}>
+              <button
+                className="mobile-menu-btn btn-secondary"
+                style={{ padding: "7px" }}
+                onClick={() => setMobileOpen(true)}
+              >
                 <Menu size={18} />
               </button>
               <span className="page-title">{pageTitle}</span>
@@ -238,11 +353,18 @@ export default function Dashboard() {
             <div className="topbar-right">
               {address ? (
                 <>
-                  <div className="addr-pill" onClick={() => navigator.clipboard.writeText(address)} title="Click to copy">
+                  <div
+                    className="addr-pill"
+                    onClick={() => navigator.clipboard.writeText(address)}
+                    title="Click to copy"
+                  >
                     {formatAddress(address)}
                   </div>
                   <button className="btn-connect on" onClick={disconnect}>
-                    <div className="pulse-dot" style={{ width: "6px", height: "6px" }} />
+                    <div
+                      className="pulse-dot"
+                      style={{ width: "6px", height: "6px" }}
+                    />
                     Connected
                   </button>
                 </>
@@ -253,12 +375,32 @@ export default function Dashboard() {
               )}
             </div>
           </header>
-
           <div className="dash-content">
             <Routes>
-              <Route path="/"         element={<Overview txLog={txLog} address={address} signer={signer} provider={provider} />} />
-              <Route path="/merchant" element={<Merchant address={address} signer={signer} addLog={addLog} />} />
-              <Route path="/customer" element={<Customer address={address} signer={signer} addLog={addLog} />} />
+              <Route
+                path="/"
+                element={
+                  <Overview
+                    txLog={txLog}
+                    address={address}
+                    signer={signer}
+                    provider={provider}
+                  />
+                }
+              />
+              <Route
+                path="/merchant"
+                element={
+                  <Merchant address={address} signer={signer} addLog={addLog} />
+                }
+              />
+              <Route
+                path="/customer"
+                element={
+                  <Customer address={address} signer={signer} addLog={addLog} />
+                }
+              />
+              <Route path="/ai" element={<AIPanel address={address} />} />
             </Routes>
           </div>
         </div>

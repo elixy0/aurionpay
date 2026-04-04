@@ -51,10 +51,16 @@ function buildHmacHeaders(method, urlPath, query, body) {
 }
 
 function buildMerchantAuth(cartContents) {
-  const privateKeyPem = fs.readFileSync(
-    path.join(__dirname, "merchant_private_key.pem"),
-    "utf8"
-  );
+  let privateKeyPem;
+  if (process.env.MERCHANT_PRIVATE_KEY_PEM) {
+    privateKeyPem = process.env.MERCHANT_PRIVATE_KEY_PEM.replace(/\\n/g, "\n");
+  } else {
+    const pemPath = path.join(__dirname, "merchant_private_key.pem");
+    if (!fs.existsSync(pemPath)) {
+      throw new Error("merchant_private_key.pem not found and MERCHANT_PRIVATE_KEY_PEM env var not set");
+    }
+    privateKeyPem = fs.readFileSync(pemPath, "utf8");
+  }
 
   const cartHash = crypto
     .createHash("sha256")

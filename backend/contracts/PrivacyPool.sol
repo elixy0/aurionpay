@@ -127,7 +127,7 @@ contract PrivacyPool is ReentrancyGuard, Ownable {
         uint256[2]    calldata a,
         uint256[2][2] calldata b,
         uint256[2]    calldata c,
-        uint256[5]    calldata publicSignals
+        uint256[3]    calldata publicSignals
     ) external nonReentrant {
         if (address(paymentGateway) == address(0)) revert GatewayNotSet();
         if (msg.sender != relayer)                 revert NotRelayer();

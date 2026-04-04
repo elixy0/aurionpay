@@ -21,7 +21,7 @@ const PAYMENT_GATEWAY_ADDRESS = process.env.PAYMENT_GATEWAY_ADDRESS;
 const USDT_ADDRESS = process.env.USDT_ADDRESS;
 
 const PRIVACY_POOL_ABI = [
-  "function withdrawAndPay(bytes32 nullifier, bytes32 invoiceId, uint256[2] a, uint256[2][2] b, uint256[2] c, uint256[5] publicSignals) external",
+  "function withdrawAndPay(bytes32 nullifier, bytes32 invoiceId, uint256[2] a, uint256[2][2] b, uint256[2] c, uint256[3] publicSignals) external",
 ];
 
 function createRelayerRouter() {
@@ -43,6 +43,20 @@ function createRelayerRouter() {
 
     try {
       console.log(`Processing withdrawal  Invoice: ${invoiceIdHex}`);
+
+      // Validate and normalize proof structure
+      console.log("Raw proof received:", {
+        proof_keys: proof ? Object.keys(proof) : "null",
+        has_pi_a: !!proof?.pi_a,
+        has_pi_b: !!proof?.pi_b,
+        has_pi_c: !!proof?.pi_c,
+        pi_a_type: typeof proof?.pi_a,
+        pi_b_type: typeof proof?.pi_b,
+        pi_c_type: typeof proof?.pi_c,
+      });
+
+      const normalizedProof = proof;
+      const normalizedSignals = publicSignals;
 
       if (process.env.OPENAI_API_KEY) {
         const aiResult = await detectAnomaly({
@@ -66,7 +80,7 @@ function createRelayerRouter() {
         }
       }
 
-      const isValid = await groth16.verify(vKey, publicSignals, proof);
+      const isValid = await groth16.verify(vKey, normalizedSignals, normalizedProof);
       if (!isValid) {
         return res.status(400).json({ error: "Invalid ZK Proof" });
       }
@@ -93,24 +107,63 @@ function createRelayerRouter() {
       const nullifierBytes = ethers.zeroPadValue("0x" + nullifierHex, 32);
       const invoiceBytes = ethers.zeroPadValue("0x" + invoiceIdHex, 32);
 
-      const a = proof.pi_a.slice(0, 2).map((x) => BigInt(x));
-      const b = [
-        [BigInt(proof.pi_b[0][1]), BigInt(proof.pi_b[0][0])],
-        [BigInt(proof.pi_b[1][1]), BigInt(proof.pi_b[1][0])],
-      ];
-      const c = proof.pi_c.slice(0, 2).map((x) => BigInt(x));
-      const ps = publicSignals.slice(0, 5).map((x) => BigInt(x));
+      console.log("Proof structure:", {
+        pi_a: normalizedProof.pi_a,
+        pi_b: normalizedProof.pi_b,
+        pi_c: normalizedProof.pi_c,
+        pi_a_length: normalizedProof.pi_a?.length,
+        pi_b_structure: normalizedProof.pi_b ? `${normalizedProof.pi_b.length}x${Array.isArray(normalizedProof.pi_b[0]) ? normalizedProof.pi_b[0].length : '?'}` : "undefined",
+        pi_c_length: normalizedProof.pi_c?.length,
+        publicSignals_length: normalizedSignals?.length,
+      });
 
-      console.log("Broadcasting to HashKey Chain testnet...");
-      const tx = await poolContract.withdrawAndPay(
-        nullifierBytes,
-        invoiceBytes,
-        a,
-        b,
-        c,
-        ps,
-        { gasLimit: 500000 }
-      );
+      // Parse proof components
+      if (!normalizedProof.pi_a || normalizedProof.pi_a.length < 2) {
+        return res.status(400).json({ error: "Invalid proof: pi_a must have at least 2 elements" });
+      }
+      if (!normalizedProof.pi_b || normalizedProof.pi_b.length < 2 || !Array.isArray(normalizedProof.pi_b[0]) || normalizedProof.pi_b[0].length < 2) {
+        return res.status(400).json({ error: "Invalid proof: pi_b must be 2x2 or larger matrix" });
+      }
+      if (!normalizedProof.pi_c || normalizedProof.pi_c.length < 2) {
+        return res.status(400).json({ error: "Invalid proof: pi_c must have at least 2 elements" });
+      }
+      if (!normalizedSignals || normalizedSignals.length < 3) {
+        return res.status(400).json({ error: "Invalid publicSignals: must have at least 3 elements" });
+      }
+
+      // Convert proof components to BigInt
+      try {
+        const a = normalizedProof.pi_a.slice(0, 2).map((x) => BigInt(x));
+        console.log("a array:", a);
+
+        const b = [
+          [BigInt(normalizedProof.pi_b[0][1]), BigInt(normalizedProof.pi_b[0][0])],
+          [BigInt(normalizedProof.pi_b[1][1]), BigInt(normalizedProof.pi_b[1][0])],
+        ];
+        console.log("b array:", b);
+
+        const c = normalizedProof.pi_c.slice(0, 2).map((x) => BigInt(x));
+        console.log("c array:", c);
+
+        const ps = normalizedSignals.slice(0, 3).map((x) => BigInt(x));
+        console.log("publicSignals:", ps);
+
+        console.log("Array lengths - a:", a.length, "b:", b.length, "b[0]:", b[0].length, "c:", c.length, "ps:", ps.length);
+        console.log("Broadcasting to HashKey Chain testnet...");
+        
+        const tx = await poolContract.withdrawAndPay(
+          nullifierBytes,
+          invoiceBytes,
+          a,
+          b,
+          c,
+          ps,
+          { gasLimit: 500000 }
+        );
+      } catch (conversionError) {
+        console.error("Error converting proof components:", conversionError);
+        throw conversionError;
+      }
 
       console.log("Tx sent:", tx.hash);
 

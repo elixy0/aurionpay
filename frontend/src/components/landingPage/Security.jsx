@@ -58,7 +58,6 @@ export function Security() {
                       <feature.icon className="w-8 h-8 text-green-400" />
                     </div>
                   </div>
-                  
                   <div className="space-y-2">
                     <h3 className="text-xl font-bold">{feature.title}</h3>
                     <p className="text-gray-400 leading-relaxed">
@@ -94,7 +93,6 @@ export function Security() {
                 <div className="text-sm text-green-100 mb-1">Audit</div>
                 <div className="font-bold">Coming soon</div>
               </div>
-
               <div className="absolute -bottom-6 -right-6 p-4 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 border border-blue-500/30 shadow-2xl">
                 <div className="text-sm text-blue-100 mb-1">Bug Bounty</div>
                 <div className="font-bold">To be announced</div>

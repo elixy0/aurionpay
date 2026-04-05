@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useWallet } from "../../hooks/useWallet.js";
 import { formatAddress } from "../../utils/tokenUtils.js";
+import { LangToggle } from "../..LanguageContext.jsx";
 import Merchant from "./Merchant.jsx";
 import Customer from "./Customer.jsx";
 import Overview from "./Overview.jsx";
@@ -322,7 +323,6 @@ export default function Dashboard() {
           className="dash-main"
           style={{ marginLeft: collapsed ? "60px" : "220px" }}
         >
-          {/* Wrong chain banner */}
           {address && !isCorrectChain && (
             <div className="wrong-chain-banner">
               <span>
@@ -351,6 +351,7 @@ export default function Dashboard() {
               <span className="network-badge">HashKey Testnet</span>
             </div>
             <div className="topbar-right">
+              <LangToggle />
               {address ? (
                 <>
                   <div

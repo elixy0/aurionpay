@@ -197,7 +197,6 @@ export default function Customer({ address, signer, addLog }) {
       const commit    = await generateCommitment(secret, nullifier);
       setZkSecrets({ secret: secret.toString(), nullifier: nullifier.toString() });
       setBackupNote(generateBackupNote(secret, nullifier));
-
       const inv       = await contracts.paymentGateway.getInvoice(invoiceId);
       const tokenAddr = inv.token;
       const amt       = inv.amount;
@@ -392,8 +391,6 @@ export default function Customer({ address, signer, addLog }) {
                   <button className="btn-secondary" onClick={reset} style={{ fontSize: "12px" }}>Use different invoice</button>
                 </div>
               )}
-
-              {/* Step 3: Verify + Pay */}
               {depositDone && !paid && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div className="card" style={{ borderColor: "var(--amber)", background: "rgba(245,158,11,0.05)", borderStyle: "dashed" }}>
@@ -433,8 +430,6 @@ export default function Customer({ address, signer, addLog }) {
                   </button>
                 </div>
               )}
-
-              {/* Step 4: Done */}
               {paid && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div className="status-bar success"><CheckCircle2 size={13} /><span>Payment complete  merchant received funds</span></div>
@@ -443,11 +438,8 @@ export default function Customer({ address, signer, addLog }) {
               )}
             </>
           )}
-
-          {/*  HSP FLOW  */}
           {mode === "hsp" && (
             <>
-              {/* Step 1: Load checkout URL */}
               {!hspUrl && !hspRedirected && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div style={{ padding: "12px", background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.2)", borderRadius: "10px" }}>
@@ -474,8 +466,6 @@ export default function Customer({ address, signer, addLog }) {
                   </button>
                 </div>
               )}
-
-              {/* Step 2: Go to checkout */}
               {hspUrl && !hspRedirected && !paid && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div style={{ padding: "12px", background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.2)", borderRadius: "10px" }}>
@@ -498,8 +488,6 @@ export default function Customer({ address, signer, addLog }) {
                   </div>
                 </div>
               )}
-
-              {/* Step 3: Returned from HSP, polling */}
               {hspRedirected && !paid && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div style={{ padding: "14px", background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.25)", borderRadius: "10px", textAlign: "center" }}>
@@ -516,8 +504,6 @@ export default function Customer({ address, signer, addLog }) {
                   )}
                 </div>
               )}
-
-              {/* Step 4: Confirmed */}
               {paid && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div style={{ padding: "16px", background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: "12px", textAlign: "center" }}>
@@ -532,11 +518,7 @@ export default function Customer({ address, signer, addLog }) {
           )}
         </div>
       </div>
-
-      {/* RIGHT */}
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-
-        {/* ZK backup note */}
         {mode === "zk" && backupNote && !paid && (
           <div className="card" style={{ borderColor: "var(--amber)", background: "rgba(245,158,11,0.05)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
@@ -552,8 +534,6 @@ export default function Customer({ address, signer, addLog }) {
             </div>
           </div>
         )}
-
-        {/* ZK active invoice */}
         {mode === "zk" && invoiceId && (
           <div className="card">
             <div className="card-title">Active Invoice</div>
@@ -592,8 +572,6 @@ export default function Customer({ address, signer, addLog }) {
             </div>
           </div>
         )}
-
-        {/* HSP active order */}
         {mode === "hsp" && (hspUrl || hspOrderId) && (
           <div className="card">
             <div className="card-title">HSP Order</div>
@@ -622,8 +600,6 @@ export default function Customer({ address, signer, addLog }) {
             </div>
           </div>
         )}
-
-        {/* How privacy works  always visible */}
         <div className="card">
           <div className="card-title">Payment Mode Comparison</div>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>

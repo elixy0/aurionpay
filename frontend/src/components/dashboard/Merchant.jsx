@@ -19,7 +19,6 @@ function generateInvoiceId() {
   return "0x" + Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-//  Mode selector card 
 function ModeCard({ mode, selected, onSelect }) {
   const isZK  = mode === "zk";
   const color = isZK ? "var(--accent)" : "var(--accent2)";
@@ -64,8 +63,7 @@ function ModeCard({ mode, selected, onSelect }) {
     </div>
   );
 }
-
-//  Steps 
+ 
 const ZK_STEPS = [
   { n: 1, label: "Set amount & token", sub: "Choose USDT, USDC or WHSK" },
   { n: 2, label: "Create invoice",     sub: "Broadcast to HashKey Chain" },
@@ -98,12 +96,11 @@ function Step({ n, label, sub, state }) {
 export default function Merchant({ address, signer, addLog }) {
   const availableTokens = getAvailableTokens();
   const defaultToken    = Object.keys(availableTokens)[0] || "USDT";
-
-  const [mode,       setMode]       = useState(null);       // "zk" | "hsp" | null
+  const [mode,       setMode]       = useState(null);       
   const [amount,     setAmount]     = useState("100");
   const [token,      setToken]      = useState(defaultToken);
   const [invoiceId,  setInvoiceId]  = useState(null);
-  const [hspUrl,     setHspUrl]     = useState(null);       // HSP payment_url
+  const [hspUrl,     setHspUrl]     = useState(null);       
   const [hspOrderId, setHspOrderId] = useState(null);
   const [status,     setStatus]     = useState({ text: "Select a settlement mode to begin", type: "idle" });
   const [paid,       setPaid]       = useState(false);
@@ -113,8 +110,6 @@ export default function Merchant({ address, signer, addLog }) {
   const steps      = mode === "hsp" ? HSP_STEPS : ZK_STEPS;
   const currentStep = paid ? 4 : (invoiceId || hspUrl) ? 3 : mode ? 1 : 0;
   const stepState   = (n) => n < currentStep ? "done" : n === currentStep ? "active" : "inactive";
-
-  // Poll payment status
   const checkPaidZK = useCallback(async (id) => {
     if (!signer) return;
     try {
@@ -149,7 +144,6 @@ export default function Merchant({ address, signer, addLog }) {
     return () => clearInterval(pollRef.current);
   }, [invoiceId, hspOrderId, paid, mode, checkPaidZK, checkPaidHSP]);
 
-  //  ZK: Create on-chain invoice 
   const createZKInvoice = useCallback(async () => {
     if (!address || !signer) return setStatus({ text: "Connect wallet first", type: "error" });
     const tokenInfo = availableTokens[token];
@@ -172,13 +166,11 @@ export default function Merchant({ address, signer, addLog }) {
       setStatus({ text: "Failed: " + (err.reason || err.message), type: "error" });
     }
   }, [address, signer, amount, token, addLog, availableTokens]);
-
-  //  HSP: Create order via backend 
+ 
   const createHSPOrder = useCallback(async () => {
     if (!address) return setStatus({ text: "Connect wallet first", type: "error" });
     const tokenInfo = availableTokens[token];
     if (!tokenInfo?.address) return setStatus({ text: "Token not supported by HSP", type: "error" });
-    // HSP only supports USDC and USDT (not WHSK)
     if (token === "WHSK") return setStatus({ text: "HSP does not support WHSK  use USDT or USDC", type: "error" });
 
     const orderId   = "AURION-" + Date.now();
@@ -223,14 +215,10 @@ export default function Merchant({ address, signer, addLog }) {
     ? JSON.stringify({ invoiceId, amount, token, tokenAddress: availableTokens[token]?.address, network: "hashkey-testnet" })
     : "";
 
-  //  Render 
   return (
     <div className="fade-in two-col" style={{ alignItems: "start" }}>
-
-      {/* LEFT: form */}
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         <div className="card">
-          {/* Header */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "18px" }}>
             <div className="action-icon" style={{ background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.25)" }}>
               <Store size={18} color="var(--accent)" />
@@ -248,8 +236,6 @@ export default function Merchant({ address, signer, addLog }) {
               </button>
             )}
           </div>
-
-          {/* Mode selector */}
           {mode === null && (
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "18px" }}>
               <div className="field-label">Select Settlement Mode</div>
@@ -257,15 +243,11 @@ export default function Merchant({ address, signer, addLog }) {
               <ModeCard mode="hsp" selected={false} onSelect={setMode} />
             </div>
           )}
-
-          {/* Steps (after mode selected) */}
           {mode && (
             <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "18px" }}>
               {steps.map(s => <Step key={s.n} {...s} state={stepState(s.n)} />)}
             </div>
           )}
-
-          {/* Form fields  shown in both modes before order created */}
           {mode && !invoiceId && !hspUrl && (
             <>
               <div>
@@ -291,14 +273,12 @@ export default function Merchant({ address, signer, addLog }) {
                   = {(() => { try { return ethers.parseUnits(amount || "0", availableTokens[token]?.decimals || 6).toString(); } catch { return "0"; } })()} micro-units
                 </div>
               </div>
-
               <div className={`status-bar ${status.type}`} style={{ marginTop: "4px" }}>
                 {status.type === "pending" ? <RefreshCw size={13} className="spin" /> :
                  status.type === "success" ? <CheckCircle2 size={13} /> :
                  status.type === "error"   ? <AlertCircle size={13} /> : <Clock size={13} />}
                 <span>{status.text}</span>
               </div>
-
               {mode === "zk" ? (
                 <button className="btn-primary" disabled={!address} onClick={createZKInvoice} style={{ marginTop: "4px" }}>
                   <Zap size={15} /> Create Invoice On-Chain
@@ -311,8 +291,6 @@ export default function Merchant({ address, signer, addLog }) {
               )}
             </>
           )}
-
-          {/* After creation  status + reset */}
           {(invoiceId || hspUrl) && (
             <>
               <div className={`status-bar ${paid ? "success" : "pending"}`} style={{ marginBottom: "10px" }}>
@@ -331,8 +309,6 @@ export default function Merchant({ address, signer, addLog }) {
             </>
           )}
         </div>
-
-        {/* HSP info banner */}
         {mode === "hsp" && !paid && (
           <div style={{ padding: "12px 14px", borderRadius: "10px", background: "rgba(6,182,212,0.06)", border: "1px solid rgba(6,182,212,0.2)" }}>
             <div style={{ fontSize: "11.5px", fontWeight: 700, color: "var(--accent2)", marginBottom: "6px", display: "flex", alignItems: "center", gap: "6px" }}>
@@ -346,15 +322,11 @@ export default function Merchant({ address, signer, addLog }) {
           </div>
         )}
       </div>
-
-      {/* RIGHT: QR / checkout link + details */}
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         <div className="card">
           <div className="card-title">
             {mode === "hsp" ? "HSP Checkout Link" : "Invoice QR Code"}
           </div>
-
-          {/* ZK QR */}
           {mode === "zk" && invoiceId && (
             <div className="qr-wrap">
               <div style={{ padding: "14px", background: "#fff", borderRadius: "12px" }}>
@@ -364,11 +336,8 @@ export default function Merchant({ address, signer, addLog }) {
               {paid && <div style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--green)", fontWeight: 700, fontSize: "13px" }}><CheckCircle2 size={16} /> Settled</div>}
             </div>
           )}
-
-          {/* HSP checkout URL */}
           {mode === "hsp" && hspUrl && (
             <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-              {/* QR of the checkout URL */}
               <div className="qr-wrap">
                 <div style={{ padding: "14px", background: "#fff", borderRadius: "12px" }}>
                   <QRCodeSVG value={hspUrl} size={180} level="M" />
@@ -376,7 +345,6 @@ export default function Merchant({ address, signer, addLog }) {
                 <div className="qr-label">Customer scans or clicks link to pay via HashKey</div>
                 {paid && <div style={{ display: "flex", alignItems: "center", gap: "7px", color: "var(--green)", fontWeight: 700, fontSize: "13px" }}><CheckCircle2 size={16} /> Settled</div>}
               </div>
-              {/* Checkout link */}
               <div>
                 <div className="field-label">Checkout URL</div>
                 <div className="hash-display" style={{ wordBreak: "break-all" }}>
@@ -394,8 +362,6 @@ export default function Merchant({ address, signer, addLog }) {
               </div>
             </div>
           )}
-
-          {/* Empty state */}
           {!invoiceId && !hspUrl && (
             <div className="qr-wrap" style={{ opacity: 0.4 }}>
               <div style={{ width: 180, height: 180, borderRadius: "12px", background: "rgba(99,102,241,0.08)", border: "2px dashed rgba(99,102,241,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -407,8 +373,6 @@ export default function Merchant({ address, signer, addLog }) {
             </div>
           )}
         </div>
-
-        {/* Invoice details */}
         {(invoiceId || hspOrderId) && (
           <div className="card">
             <div className="card-title">Order Details</div>

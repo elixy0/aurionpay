@@ -27,7 +27,6 @@ export default function Overview({ txLog, address }) {
         <StatCard title="Private Payments" value={txLog.filter(t => t.label === "Private payment").length} sub="Nullifiers spent" accent="var(--accent2)" icon={Lock}     />
         <StatCard title="Commitments"     value={txLog.filter(t => t.label === "Privacy deposit").length}  sub="Deposits logged" accent="var(--accent3)" icon={Shield}   />
       </div>
-
       <div className="two-col" style={{ marginBottom: "14px" }}>
         <div className="card">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>

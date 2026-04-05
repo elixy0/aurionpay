@@ -260,7 +260,7 @@ aurionpay-hash/
     relayer/
        router.js         ZK proof verify + HashKey broadcast
     ai/
-       ai-service.js     Claude API integration
+       ai-service.js     OpenAI API integration
        router.js         AI endpoints
     hsp/
         hsp-service.js    HSP HMAC + ES256K JWT

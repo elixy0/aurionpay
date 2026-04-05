@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useWallet } from "../../hooks/useWallet.js";
 import { formatAddress } from "../../utils/tokenUtils.js";
-import { LangToggle } from "../..LanguageContext.jsx";
+import { LangToggle } from "../../lib/LanguageContext.jsx";
 import Merchant from "./Merchant.jsx";
 import Customer from "./Customer.jsx";
 import Overview from "./Overview.jsx";

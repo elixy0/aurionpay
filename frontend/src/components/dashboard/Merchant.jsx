@@ -84,6 +84,22 @@ const HSP_STEPS = [
   { n: 4, label: t("awaitConfirmation", lang), sub: t("hspWebhookConfirmsSettlement", lang) },
 ];
 
+function Step({ n, label, sub, state }) {
+  const bg = state === "done" ? "rgba(16,185,129,0.15)" : state === "active" ? "rgba(99,102,241,0.12)" : "rgba(71,85,105,0.07)";
+  const bc = state === "done" ? "rgba(16,185,129,0.3)"  : state === "active" ? "rgba(99,102,241,0.28)"  : "rgba(71,85,105,0.15)";
+  return (
+    <div className="step-row" style={{ background: bg, borderColor: bc }}>
+      <div className="step-num" style={{ background: state === "done" ? "#10b981" : state === "active" ? "linear-gradient(135deg,#4f46e5,#7c3aed)" : "rgba(71,85,105,0.3)" }}>
+        {state === "done" ? <CheckCircle2 size={13} /> : n}
+      </div>
+      <div>
+        <div className="step-text" style={{ color: state === "inactive" ? "var(--text-dim)" : "var(--text)" }}>{label}</div>
+        <div className="step-sub">{sub}</div>
+      </div>
+    </div>
+  );
+}
+
   const [mode,       setMode]       = useState(null);       
   const [amount,     setAmount]     = useState("100");
   const [token,      setToken]      = useState(defaultToken);

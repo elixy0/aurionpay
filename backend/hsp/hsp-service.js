@@ -3,6 +3,7 @@ import axios from "axios";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import https from "https";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,7 +44,7 @@ function buildHmacHeaders(method, urlPath, query, body) {
 
   const message   = [method.toUpperCase(), urlPath, query || "", bodyHash, timestamp, nonce].join("\n");
   const signature = crypto.createHmac("sha256", APP_SECRET).update(message).digest("hex");
-
+  console.log("[HSP] Headers:", headers);
   console.log("[HSP] Signing:", { method, urlPath, query, bodyHash: bodyHash.slice(0,16)+"...", timestamp, nonce });
 
   return {
@@ -123,7 +124,7 @@ export async function createHSPOrder({
   const token = TOKENS[currency.toUpperCase()];
   if (!token) throw new Error(`Unsupported currency: ${currency}. Use USDC or USDT.`);
 
-  const amountStr = (Number(amount) / Math.pow(10, token.decimals)).toFixed(2);
+  const amountStr = (Number(amount) / Math.pow(10, token.decimals)).toString();
   const label     = invoiceNote || "AurionPay Private Payment";
 
   const cartContents = {
@@ -157,35 +158,65 @@ export async function createHSPOrder({
   const headers = buildHmacHeaders("POST", urlPath, "", body);
 
   console.log("[HSP] Calling:", HSP_BASE_URL + urlPath);
+  
+  const agent = new https.Agent({
+  keepAlive: true,
+  family: 4, // force IPv4
+});
 
-  try {
-    const response = await axios.post(`${HSP_BASE_URL}${urlPath}`, body, { headers });
-    if (response.data.code !== 0) {
-      throw new Error(`HSP error ${response.data.code}: ${response.data.msg}`);
-    }
-    return response.data.data;
-  } catch (err) {
-    if (err.response) {
-      console.error("[HSP] Response error:", err.response.status, JSON.stringify(err.response.data));
-      throw new Error(`HSP API ${err.response.status}: ${JSON.stringify(err.response.data)}`);
-    }
-    throw err;
+try {
+  const response = await fetch(`${HSP_BASE_URL}${urlPath}`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      "User-Agent": "curl/7.81.0",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+    },
+    body: JSON.stringify(body),
+    agent, // important for Node < 20 (safe to keep)
+  });
+
+  const data = await response.json();
+
+  if (data.code !== 0) {
+    throw new Error(`HSP error ${data.code}: ${data.msg}`);
   }
+
+  return data.data;
+
+} catch (err) {
+  console.error("[HSP] Fetch error:", err.message);
+  throw err;
 }
+
+}
+
+const agent = new https.Agent({
+  keepAlive: true,
+  family: 4,
+});
 
 export async function queryHSPPayment(cartMandateId) {
   const urlPath = "/api/v1/merchant/payments";
   const query   = `cart_mandate_id=${cartMandateId}`;
   const headers = buildHmacHeaders("GET", urlPath, query, null);
 
-  try {
-    const response = await axios.get(`${HSP_BASE_URL}${urlPath}?${query}`, { headers });
-    if (response.data.code !== 0) throw new Error(`HSP query error: ${response.data.msg}`);
-    return response.data.data;
-  } catch (err) {
-    if (err.response) {
-      throw new Error(`HSP API ${err.response.status}: ${JSON.stringify(err.response.data)}`);
-    }
-    throw err;
+  const response = await fetch(`${HSP_BASE_URL}${urlPath}?${query}`, {
+    method: "GET",
+    headers: {
+      ...headers,
+      "User-Agent": "curl/7.81.0",
+      "Accept": "*/*",
+    },
+    agent,
+  });
+
+  const data = await response.json();
+
+  if (data.code !== 0) {
+    throw new Error(`HSP query error: ${data.msg}`);
   }
+
+  return data.data;
 }

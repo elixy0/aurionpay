@@ -44,7 +44,6 @@ function buildHmacHeaders(method, urlPath, query, body) {
 
   const message   = [method.toUpperCase(), urlPath, query || "", bodyHash, timestamp, nonce].join("\n");
   const signature = crypto.createHmac("sha256", APP_SECRET).update(message).digest("hex");
-  console.log("[HSP] Headers:", headers);
   console.log("[HSP] Signing:", { method, urlPath, query, bodyHash: bodyHash.slice(0,16)+"...", timestamp, nonce });
 
   return {
@@ -156,12 +155,12 @@ export async function createHSPOrder({
 
   const urlPath = "/api/v1/merchant/orders";
   const headers = buildHmacHeaders("POST", urlPath, "", body);
-
+  console.log("[HSP] Headers:", headers);
   console.log("[HSP] Calling:", HSP_BASE_URL + urlPath);
   
   const agent = new https.Agent({
   keepAlive: true,
-  family: 4, // force IPv4
+  family: 4, 
 });
 
 try {
@@ -174,7 +173,7 @@ try {
       "Connection": "keep-alive",
     },
     body: JSON.stringify(body),
-    agent, // important for Node < 20 (safe to keep)
+    agent, 
   });
 
   const data = await response.json();
